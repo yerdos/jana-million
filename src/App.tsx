@@ -2542,7 +2542,7 @@ function App() {
                 <div className="bg-gradient-to-r from-yellow-400 to-yellow-300 rounded-2xl p-6 inline-block shadow-xl">
                   <div className="text-7xl mb-3">{winner.avatar}</div>
                   <div className="text-4xl font-bold text-gray-900 mb-2">{winner.username}</div>
-                  <div className="text-3xl font-bold text-green-800">1 000 000 ₸ жеңіп алды!</div>
+                  <div className="text-3xl font-bold text-green-800"> жеңіп алды!</div>
                 </div>
               </div>
 
