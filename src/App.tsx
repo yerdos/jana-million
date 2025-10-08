@@ -10,7 +10,7 @@ interface TikTokUser {
 }
 
 const mockUsers: TikTokUser[] = [
-  { id: '1', username: 'mivya.n', avatar: '🎲', videoUrl: 'https://www.tiktok.com/@mivya.n/video/7545903796275170582', videoId: '7545903796275170582' },
+ { id: '1', username: 'mivya.n', avatar: '🎲', videoUrl: 'https://www.tiktok.com/@mivya.n/video/7545903796275170582', videoId: '7545903796275170582' },
 { id: '2', username: 'errzzzattt', avatar: '🎲', videoUrl: 'https://www.tiktok.com/@errzzzattt/video/7556045515402513676', videoId: '7556045515402513676' },
 { id: '3', username: 'qwerta017', avatar: '🎲', videoUrl: 'https://www.tiktok.com/@qwerta017/video/7550567451637992710', videoId: '7550567451637992710' },
 { id: '4', username: 'fromanotherplanet07', avatar: '🎲', videoUrl: 'https://www.tiktok.com/@fromanotherplanet07/video/7555179319044132152', videoId: '7555179319044132152' },
@@ -51,6 +51,7 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [confetti, setConfetti] = useState<Array<{ id: number; left: number; delay: number }>>([]);
   const [embedLoaded, setEmbedLoaded] = useState(false);
+  const [spinInterval, setSpinInterval] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (winner) {
@@ -93,23 +94,23 @@ function App() {
     setShowModal(false);
     setConfetti([]);
 
-    let interval: NodeJS.Timeout;
-    let duration = 0;
-    const maxDuration = 5000;
-
-    interval = setInterval(() => {
+    const interval = setInterval(() => {
       const randomUsers = [...mockUsers].sort(() => Math.random() - 0.5).slice(0, 3);
       setCurrentUsers(randomUsers);
-      duration += 100;
-
-      if (duration >= maxDuration) {
-        clearInterval(interval);
-        const finalWinner = mockUsers[Math.floor(Math.random() * mockUsers.length)];
-        setWinner(finalWinner);
-        setIsSpinning(false);
-        setTimeout(() => setShowModal(true), 1000);
-      }
     }, 100);
+
+    setSpinInterval(interval);
+  };
+
+  const stopLottery = () => {
+    if (spinInterval) {
+      clearInterval(spinInterval);
+      setSpinInterval(null);
+    }
+    const finalWinner = mockUsers[Math.floor(Math.random() * mockUsers.length)];
+    setWinner(finalWinner);
+    setIsSpinning(false);
+    setTimeout(() => setShowModal(true), 1000);
   };
 
   const closeModal = () => {
@@ -203,18 +204,22 @@ function App() {
               )}
             </div>
 
-            {/* Start Button */}
-            <button
-              onClick={startLottery}
-              disabled={isSpinning}
-              className={`w-full mt-6 py-5 rounded-xl font-bold text-2xl transition-all transform hover:scale-105 shadow-xl ${
-                isSpinning
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-green-900'
-              }`}
-            >
-              {isSpinning ? 'Таңдап жатыр...' : winner ? 'Қайта бастау' : 'Ұтысты бастау!'}
-            </button>
+            {/* Start/Stop Buttons */}
+            {!isSpinning ? (
+              <button
+                onClick={startLottery}
+                className="w-full mt-6 py-5 rounded-xl font-bold text-2xl transition-all transform hover:scale-105 shadow-xl bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-green-900"
+              >
+                {winner ? 'Қайта бастау' : 'Ұтысты бастау!'}
+              </button>
+            ) : (
+              <button
+                onClick={stopLottery}
+                className="w-full mt-6 py-5 rounded-xl font-bold text-2xl transition-all transform hover:scale-105 shadow-xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white"
+              >
+                Тоқтату!
+              </button>
+            )}
           </div>
 
           {/* Right Side - JANA POST */}
