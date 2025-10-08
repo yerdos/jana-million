@@ -167,7 +167,7 @@ function App() {
             <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 flex-1 flex flex-col items-center justify-center">
               {!winner && !isSpinning && (
                 <div className="text-center">
-                  <img src="/WhatsApp Image 2025-10-06 at 16.58.08.jpeg" alt="Trophy" className="w-40 h-40 mx-auto mb-4 object-contain" />
+                  <img src="/jana_cup.png" alt="Trophy" className="w-40 h-40 mx-auto mb-4 object-contain" />
                   <p className="text-4xl text-gray-900 font-black">Жеңімпазды анықтауға дайынсыз ба?</p>
                 </div>
               )}
